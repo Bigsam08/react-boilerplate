@@ -1,9 +1,52 @@
-import React from 'react'
+/**
+ * @description This is the input reuseable component to accept user input
+ * @returns A component that takes  in props like label value placeholder etc
+ */
 
-const input = () => {
+import { User, Lock, MailIcon, EyeClosedIcon, EyeOffIcon } from "lucide-react";
+import { useState } from "react";
+
+const Input = ({ label, type, placeholder, ...props }) => {
+  const [showPassword, setShowPassword] = useState(false);
+
+  /** function to toggle visibility */
+  const toggleVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   return (
-    <div>input</div>
-  )
-}
+    <div className="relative">
+      <label className="block text-sm mb-1" htmlFor={props.name}> {label} </label>
 
-export default input
+      {/** icon */}
+      <span className="absolute left-2 top-9 text-cyan-500 z-10">
+        {type === "name" && <User size={20} />}
+        {type === "password" && <Lock size={20} />}
+        {type === "email" && <MailIcon size={20} />}
+      </span>
+
+      {/** password visibility */}
+      <span className="absolute right-2 top-10 text-gray-500 z-10">
+        <button type="button" onClick={toggleVisibility}>
+          {type === "password" &&
+            (showPassword ? (
+              <EyeOffIcon size={20} />
+            ) : (
+              <EyeClosedIcon size={20} />
+            ))}
+        </button>
+      </span>
+
+      {/**input field */}
+      <input
+        id={props.name}
+        type={showPassword ? "text" : type}
+        placeholder={placeholder}
+        className={`w-full py-3 px-8 rounded-lg focus:outline-none hover:shadow-md bg-white/90 placeholder:text-gray-700 text-gray-900 text-base`}
+        {...props}
+      />
+    </div>
+  );
+};
+
+export default Input;
